@@ -1,0 +1,30 @@
+{
+  "name": "realtime",
+  "version": "1.0.0",
+  "description": "\"Realtime survey results\"",
+  "main": "server.js",
+  "scripts": {
+    "test": "mocha",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/bethsebian/realtime.git"
+  },
+  "keywords": [
+    "survey",
+    "realtime",
+    "vote"
+  ],
+  "author": "Beth Sebian",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bethsebian/realtime/issues"
+  },
+  "homepage": "https://github.com/bethsebian/realtime#readme",
+  "dependencies": {
+    "express": "^4.13.4",
+    "lodash": "^4.11.1",
+    "socket.io": "^1.4.5"
+  }
+}

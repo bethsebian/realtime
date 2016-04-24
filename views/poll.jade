@@ -4,10 +4,13 @@ html(lang="en")
     title= title
   body
     h1= title
-    h3= pollId
     h3= poll.name
     ul
       li= poll.option1
       li= poll.option2
       li= poll.option3
       li= poll.option4
+    h3
+      a(href="localhost:3000/polls/" + pollId) Admin link
+    h3
+      a(href="localhost:3000/voting/" + pollId) Voting link

@@ -37,6 +37,13 @@ app.get('/polls/:id', (request, response) => {
   response.render('poll', { pollId: pollId, poll: poll });
 });
 
+app.get('/voting/:id', (request, response) => {
+  var pollId = request.params.id;
+  var poll = app.locals.polls[pollId];
+
+  response.render('voting', { pollId: pollId, poll: poll });
+});
+
 if (!module.parent) {
   app.listen(app.get('port'), () => {
     console.log(`${app.locals.title} is running on ${app.get('port')}.`);

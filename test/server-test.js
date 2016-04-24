@@ -48,6 +48,29 @@ describe('Server', () => {
     });
   });
 
+  describe('GET /voting/:id', () => {
+    it('should not return a 404', (done) => {
+      app.locals.polls = { "uniqueid": fixtures.validPoll };
+
+      this.request.get('/voting/uniqueid', (error, response) => {
+        if (error) { done(error); }
+        assert.notEqual(response.statusCode, 404);
+        done();
+      });
+    });
+
+    it('should show unique poll content', (done) => {
+      app.locals.polls = { "uniqueid": fixtures.validPoll };
+
+      this.request.get('/voting/uniqueid', (error, response) => {
+        if (error) { done(error); }
+        assert(response.body.includes(app.locals.polls['uniqueid'].name),
+               `"/poll/:id" does not include "${app.locals.polls['uniqueid'].name}".`);
+        done();
+      });
+    });
+  });
+
   describe('GET /', () => {
     it('should return a 200', (done) => {
       this.request.get('/', (error, response) => {
@@ -125,6 +148,10 @@ describe('Server', () => {
   describe('POST /polls', () => {
     beforeEach(() => {
       app.locals.polls = {};
+    });
+
+    it('should redirect to /polls/:id', (done) => {
+      done();
     });
 
     it('should receive and store data', (done) => {

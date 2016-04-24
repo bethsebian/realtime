@@ -16,15 +16,26 @@ app.get('/', (request, response) => {
   response.render('index');
 });
 
+app.get('/polls', (request, response) => {
+  response.render('polls', { polls: app.locals.polls });
+});
+
 app.post('/polls', (request, response) => {
   var id = generateId();
   app.locals.polls[id] = request.body;
-  response.sendStatus(201);
-})
+  response.render('polls', { polls: app.locals.polls, ids: [id] });
+});
 
 app.get('/polls/new', (request, response) => {
   response.render('new-poll');
-})
+});
+
+app.get('/polls/:id', (request, response) => {
+  var pollId = request.params.id;
+  var poll = app.locals.polls[pollId];
+
+  response.render('poll', { pollId: pollId, poll: poll });
+});
 
 if (!module.parent) {
   app.listen(app.get('port'), () => {

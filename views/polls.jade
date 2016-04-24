@@ -1,0 +1,17 @@
+doctype html
+html(lang="en")
+  head
+    title= title
+  body
+    h1= title
+    h2= ids
+    ul
+      each val, index in polls
+        h3= val.name
+        li= val.option1
+        li= val.option2
+        li= val.option3
+        li= val.option4
+        li
+          a(href="localhost:3000/polls/" + index, target='_blank') View poll details
+

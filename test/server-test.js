@@ -25,6 +25,29 @@ describe('Server', () => {
     assert(app);
   });
 
+  describe('GET /polls/:id', () => {
+    it('should not return a 404', (done) => {
+      app.locals.polls = { "uniqueid": fixtures.validPoll };
+
+      this.request.get('/polls/uniqueid', (error, response) => {
+        if (error) { done(error); }
+        assert.notEqual(response.statusCode, 404);
+        done();
+      });
+    });
+
+    it('should show unique poll content', (done) => {
+      app.locals.polls = { "uniqueid": fixtures.validPoll };
+
+      this.request.get('/polls/uniqueid', (error, response) => {
+        if (error) { done(error); }
+        assert(response.body.includes(app.locals.polls['uniqueid'].name),
+               `"/poll/:id" does not include "${app.locals.polls['uniqueid'].name}".`);
+        done();
+      });
+    });
+  });
+
   describe('GET /', () => {
     it('should return a 200', (done) => {
       this.request.get('/', (error, response) => {
@@ -71,8 +94,35 @@ describe('Server', () => {
     });
   });
 
-  describe('POST /polls', () => {
 
+  describe('GET /polls', () => {
+    it('should not return 404', (done) => {
+      this.request.get('/polls', (error, response) => {
+        if (error) { done(error); }
+        assert.notEqual(response.statusCode, 404);
+        done();
+      });
+    });
+
+    it('should show current polls', (done) => {
+      app.locals.polls = { polls: fixtures.validPoll };
+
+      this.request.get('/polls', (error, response) => {
+        if (error) { done(error); }
+        assert(response.body.includes(fixtures.validPoll.name),
+              `"/polls/new does not include ${fixtures.validPoll.name}.`);
+        assert(response.body.includes(fixtures.validPoll.option1),
+              `"/polls/new does not include ${fixtures.validPoll.option1}.`);
+        assert(response.body.includes(fixtures.validPoll.option2),
+              `"/polls/new does not include ${fixtures.validPoll.option2}.`);
+        assert(response.body.includes(fixtures.validPoll.option3),
+              `"/polls/new does not include ${fixtures.validPoll.option3}.`);
+        done();
+      });
+    });
+  });
+
+  describe('POST /polls', () => {
     beforeEach(() => {
       app.locals.polls = {};
     });
@@ -82,11 +132,9 @@ describe('Server', () => {
 
       this.request.post('/polls', { form: payload }, (error, response) => {
         if (error) { done(error); }
-
         var pollCount = Object.keys(app.locals.polls).length;
 
         assert.equal(pollCount, 1, `Expected 1 poll, found ${pollCount}`);
-
         done();
       });
     });
@@ -99,13 +147,4 @@ describe('Server', () => {
       });
     });
   });
-  // describe('GET /voting/:id', () => {
-  //   it('should return a 200', (done) => {
-  //     request.get('/voting/:id', (error, response) => {
-  //       if (error) { done(error); }
-  //       assert.equal(response.statusCode, 200);
-  //       done();
-  //     });
-  //   });
-  // });
 });

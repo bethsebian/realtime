@@ -23,7 +23,7 @@ app.get('/polls', (request, response) => {
 app.post('/polls', (request, response) => {
   var id = generateId();
   app.locals.polls[id] = request.body;
-  response.render('polls', { polls: app.locals.polls, ids: [id] });
+  response.redirect(`polls/${id}`);
 });
 
 app.get('/polls/new', (request, response) => {

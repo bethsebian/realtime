@@ -9,8 +9,14 @@ app.set('port', process.env.PORT || 3000);
 app.set('view engine', 'jade');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
 app.locals.title = 'Realtime';
 app.locals.polls = {};
+
+var server = http.createServer(app)
+                 .listen(app.get('port'), function () {
+                   console.log('Listening on port ' + app.get('port') + '.');
+                 });
 
 app.get('/', (request, response) => {
   response.render('index');
@@ -44,25 +50,11 @@ app.get('/voting/:id', (request, response) => {
   response.render('voting', { pollId: pollId, poll: poll });
 });
 
-if (!module.parent) {
-  app.listen(app.get('port'), () => {
-    console.log(`${app.locals.title} is running on ${app.get('port')}.`);
-  });
-}
+// app.listen(app.get('port'), () => {
+//   console.log(`${app.locals.title} is running on ${app.get('port')}.`);
+// });
 
 
-// app.use(express.static('public'));
-//
-// app.get('/', function (req, res) {
-//   res.sendFile(__dirname + '/public/index.html');
-// });
-//
-var port = process.env.PORT || 3000;
-// var server = http.createServer(app)
-//
-// server.listen(port, function () {
-//   console.log('Listening on port ' + port + '.');
-// });
 //
 //
 //

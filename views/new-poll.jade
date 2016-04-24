@@ -1,0 +1,22 @@
+doctype html
+html(lang="en")
+  head
+    title= title
+  body
+    h1= title
+    h2= "Add a new poll"
+    form(name="add-poll", method="post")
+        div.input
+            span.label Name:
+            input(type="text", name="Name:")
+        div.input
+            span.label Option 1:
+            input(type="text", name="Option 1:")
+        div.input
+            span.label Option 2:
+            input(type="text", name="Option 2:")
+        div.input
+            span.label Option 3:
+            input(type="text", name="Option 3:")
+        div.actions
+            input(type="submit", value="add poll")

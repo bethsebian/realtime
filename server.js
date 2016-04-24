@@ -2,19 +2,28 @@ const http = require('http');
 const express = require('express');
 const app = express();
 const path = require('path');
+const bodyParser = require('body-parser');
+const generateId = require('./lib/generate-id');
 
 app.set('port', process.env.PORT || 3000);
 app.set('view engine', 'jade');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.locals.title = 'Realtime';
-app.locals.surveys = {};
+app.locals.polls = {};
 
 app.get('/', (request, response) => {
   response.render('index');
-  // response.send('Welcome to ' + app.locals.title + '!');
 });
 
 app.post('/polls', (request, response) => {
+  var id = generateId();
+  app.locals.polls[id] = request.body;
   response.sendStatus(201);
+})
+
+app.get('/polls/new', (request, response) => {
+  response.render('new-poll');
 })
 
 if (!module.parent) {

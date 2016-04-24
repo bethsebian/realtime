@@ -1,6 +1,7 @@
 const assert = require('assert');
 const app = require('../server');
 const request = require('request');
+const fixtures = require('./fixtures');
 
 describe('Server', () => {
   before(done => {
@@ -45,11 +46,49 @@ describe('Server', () => {
     });
   });
 
+  describe('GET /polls/new', () => {
+    it('should not return 404', (done) => {
+      this.request.get('/polls/new', (error, response) => {
+        if (error) { done(error); }
+        assert.notEqual(response.statusCode, 404);
+        done();
+      });
+    });
+
+    it('should have a form for submitting a new poll', (done) => {
+      this.request.get('/polls/new', (error, response) => {
+        if (error) { done(error); }
+        assert(response.body.includes('Name:'),
+               `"/polls/new does not include ${response.body}.`);
+        assert(response.body.includes('Option 1:'),
+              `"/polls/new does not include "Option 1:".`);
+        assert(response.body.includes('Option 2:'),
+               `"/polls/new does not include "Option 2:".`);
+        assert(response.body.includes('Option 3:'),
+              `"/polls/new does not include "Option 3:".`);
+        done();
+      });
+    });
+  });
+
   describe('POST /polls', () => {
+
+    beforeEach(() => {
+      app.locals.polls = {};
+    });
+
     it('should receive and store data', (done) => {
-      // Our implementation will go here…
-      assert(true);
-      done();
+      var payload = { polls: fixtures.validPoll };
+
+      this.request.post('/polls', { form: payload }, (error, response) => {
+        if (error) { done(error); }
+
+        var pollCount = Object.keys(app.locals.polls).length;
+
+        assert.equal(pollCount, 1, `Expected 1 poll, found ${pollCount}`);
+
+        done();
+      });
     });
 
     it('should not return 404', (done) => {

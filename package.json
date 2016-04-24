@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/bethsebian/realtime#readme",
   "dependencies": {
+    "body-parser": "^1.15.0",
     "express": "^4.13.4",
     "jade": "^1.11.0",
     "lodash": "^4.11.1",

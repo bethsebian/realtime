@@ -7,14 +7,18 @@ html(lang="en")
     h3= poll.name
 
     ul
-      li= poll.option1 + ": " + poll.votes.A
-        button(id="a" class="options-button") select
-      li= poll.option2 + ": " + poll.votes.B
-        button(id="b" class="options-button") select
-      li= poll.option3 + ": " + poll.votes.C
-        button(id="c" class="options-button") select
-      li= poll.option4 + ": " + poll.votes.D
-        button(id="d" class="options-button") select
+      li= poll.option1
+        button(id="a" class="options-button" name=poll.name) select
+      li= poll.option2
+        button(id="b" class="options-button" name=poll.name) select
+      li= poll.option3
+        button(id="c" class="options-button" name=poll.name) select
+      li= poll.option4
+        button(id="d" class="options-button" name=poll.name) select
+
+    #vote-tally
+      each val, index in poll.votes
+        li= index + ": " + val
 
     script(src="/socket.io/socket.io.js")
     script(src="/client.js")

@@ -30,12 +30,7 @@ app.get('/polls', (request, response) => {
 app.post('/polls', (request, response) => {
   var id = generateId();
   app.locals.polls[id] = request.body;
-  app.locals.polls[id].votes = {
-    A: 0,
-    B: 0,
-    C: 0,
-    D: 0
-  };
+  app.locals.polls[id].votes = { a: 0, b: 0, c: 0, d: 0 };
   response.redirect(`polls/${id}`);
 });
 
@@ -53,7 +48,7 @@ app.get('/polls/:id', (request, response) => {
 app.get('/voting/:id', (request, response) => {
   var pollId = request.params.id;
   var poll = app.locals.polls[pollId];
-
+  console.log(app.locals.polls[pollId]);
   response.render('voting', { pollId: pollId, poll: poll });
 });
 
@@ -80,8 +75,10 @@ io.on('connection', function (socket) {
 //
   socket.on('message', function (channel, message) {
     if (channel === 'voteSubmitted') {
-      console.log(message.vote)
-      // votes[socket.id] = message;
+      var voteOption = message.vote;
+      var poll = message.pollId;
+      incrementVotes(poll, voteOption);
+      io.sockets.emit('voteTally', {votes: app.locals.polls[poll].votes, vote: voteOption})
       // io.sockets.emit('voteCount', countVotes(votes));
     }
   });
@@ -93,6 +90,12 @@ io.on('connection', function (socket) {
 //     io.sockets.emit('usersConnected', io.engine.clientsCount);
 //   });
 });
+
+var incrementVotes = function (poll, voteOption) {
+  app.locals.polls[poll].votes[voteOption]++;
+  console.log(app.locals.polls[poll].votes);
+};
+
 //
 // function countVotes(votes) {
 //   var voteCount = {

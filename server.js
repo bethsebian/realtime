@@ -30,6 +30,12 @@ app.get('/polls', (request, response) => {
 app.post('/polls', (request, response) => {
   var id = generateId();
   app.locals.polls[id] = request.body;
+  app.locals.polls[id].votes = {
+    A: 0,
+    B: 0,
+    C: 0,
+    D: 0
+  };
   response.redirect(`polls/${id}`);
 });
 
@@ -72,12 +78,13 @@ io.on('connection', function (socket) {
 //   io.sockets.emit('usersConnected', io.engine.clientsCount);
 //   socket.emit('statusMessage', 'You have connected.')
 //
-//   socket.on('message', function (channel, message) {
-//     if (channel === 'voteCast') {
-//       votes[socket.id] = message;
-//       io.sockets.emit('voteCount', countVotes(votes));
-//     }
-//   });
+  socket.on('message', function (channel, message) {
+    if (channel === 'voteSubmitted') {
+      console.log(socket.vote)
+      // votes[socket.id] = message;
+      // io.sockets.emit('voteCount', countVotes(votes));
+    }
+  });
 //
 //   socket.on('disconnect', function () {
 //     console.log('A user has disconnected.', io.engine.clientsCount);

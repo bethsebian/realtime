@@ -6,10 +6,10 @@ html(lang="en")
     h1= title
     h3= poll.name
     ul
-      li= poll.option1
-      li= poll.option2
-      li= poll.option3
-      li= poll.option4
+      li= poll.option1 + ": " + poll.votes.A
+      li= poll.option2 + ": " + poll.votes.B
+      li= poll.option3 + ": " + poll.votes.C
+      li= poll.option4 + ": " + poll.votes.D
     h3
       a(href="localhost:3000/polls/" + pollId) Admin link
     h3

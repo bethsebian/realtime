@@ -5,14 +5,16 @@ html(lang="en")
   body
     h1= title
     h3= poll.name
+
     ul
-      li= poll.option1
-        button(onclick='#selectOption1()}') select
-      li= poll.option2
-        button(onclick='#selectOption2()}') select
-      li= poll.option3
-        button(onclick='#selectOption3()}') select
-      li= poll.option4
-        button(onclick='#selectOption4()}') select
+      li= poll.option1 + ": " + poll.votes.A
+        button(id="a" class="options-button") select
+      li= poll.option2 + ": " + poll.votes.B
+        button(id="b" class="options-button") select
+      li= poll.option3 + ": " + poll.votes.C
+        button(id="c" class="options-button") select
+      li= poll.option4 + ": " + poll.votes.D
+        button(id="d" class="options-button") select
+
     script(src="/socket.io/socket.io.js")
     script(src="/client.js")

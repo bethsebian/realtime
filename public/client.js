@@ -1,5 +1,25 @@
 var socket = io();
+var buttons = document.getElementsByClassName('options-button');
 
+for (var i = 0; i < buttons.length; i++ ) {
+  buttons[i].addEventListener('click', function () {
+    socket.send('voteSubmitted', { vote: this.id });
+  });
+}
+
+
+
+// button.addEventListener('click', function () {
+//   console.log("hello, button 1 was clicked");
+// });
+//
+// button.addEventListener('click', function () {
+//   console.log("hello, button 1 was clicked");
+// });
+//
+// button.addEventListener('click', function () {
+//   console.log("hello, button 1 was clicked");
+// });
 // var connectionCount = document.getElementById('connection-count');
 //
 // socket.on('usersConnected', function (count) {

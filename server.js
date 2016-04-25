@@ -4,13 +4,17 @@ const app = express();
 const path = require('path');
 const bodyParser = require('body-parser');
 const generateId = require('./lib/generate-id');
+const currentTime = require('./lib/current-time');
+const getVoteTally = require('./lib/get-vote-tally');
+const incrementVotes = require('./lib/increment-votes');
+const scheduleCloseTime = require('./lib/schedule-close-time');
+const updateStatus = require('./lib/update-status');
 
 app.set('port', process.env.PORT || 3000);
 app.set('view engine', 'jade');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
-
 app.locals.title = 'Realtime';
 app.locals.polls = {};
 
@@ -37,10 +41,6 @@ app.post('/polls', (request, response) => {
 
 app.get('/polls/new', (request, response) => {
   response.render('new-poll');
-});
-
-app.post('/polls/:id', (request, response) => {
-
 });
 
 app.get('/polls/:id', (request, response) => {
@@ -75,7 +75,7 @@ io.on('connection', function (socket) {
     var voteOption = message.vote;
     var poll = message.pollId;
     if (channel === 'voteSubmitted') {
-      incrementVotes(poll, voteOption);
+      incrementVotes(app, poll, voteOption);
       io.sockets.emit('voteTally', {votes: app.locals.polls[poll].votes, vote: voteOption, pollId: poll, poll: app.locals.polls[poll]});
     }
     if (channel === "closePoll") {
@@ -84,37 +84,5 @@ io.on('connection', function (socket) {
     }
   });
 });
-
-var updateStatus = function (poll) {
-  if (poll.scheduledClose && poll.scheduledClose < currentTime) {
-    poll.active = false;
-  }
-};
-
-var incrementVotes = function (poll, voteOption) {
-  if (!poll.scheduledClose || poll.scheduledClose && poll.scheduledClose > currentTime()) {
-    app.locals.polls[poll].votes[voteOption]++;
-  }
-};
-
-var currentTime = function () {
-  var d = new Date();
-  return d.toUTCString();
-};
-
-var getVoteTally = function (pollInfo) {
-  var tally = {};
-  Object.keys(pollInfo).forEach(function (key) {
-    if(key !== "name" && pollInfo[key].length !== 0 ) {
-      tally[key] = 0;
-    }
-  });
-  return tally;
-};
-
-var scheduleCloseTime = function (data, pollObj) {
-  var closeStamp = new Date(data.year, (data.month - 1), data.day, data.hour, data.minute, 0, 0);
-  pollObj.scheduledClose = closeStamp;
-};
 
 module.exports = app;

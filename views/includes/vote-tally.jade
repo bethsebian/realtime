@@ -1,0 +1,4 @@
+div(id="vote-tally-" + pollId)
+  each val, index in poll.votes
+    span= poll[index] + ": " + val
+    br

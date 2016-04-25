@@ -22,10 +22,6 @@ html(lang="en")
           br
 
 
-    div(id="vote-tally-" + pollId)
-      each val, index in poll.votes
-        span= poll[index] + ": " + val
-        br
+    include ./includes/vote-tally.jade
 
-    script(src="/socket.io/socket.io.js")
-    script(src="/client.js")
+    include ./includes/footer.jade

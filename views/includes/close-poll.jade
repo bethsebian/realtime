@@ -1,0 +1,24 @@
+#close-time
+  if poll.scheduledClose
+    h4= "Poll will close at " + poll.scheduledClose
+  else
+    #close-wrap
+      #schedule-form
+        form(name="schedule-close", action='/polls/'+ pollId, method="put")
+            div.input
+                span.label Year (201X):
+                input(type="text", name="year")
+            div.input
+                span.label Month (1-12):
+                input(type="text", name="month")
+            div.input
+                span.label Day (1-31):
+                input(type="text", name="day")
+            div.input
+                span.label Hour (1-24):
+                input(type="text", name="hour")
+            div.input
+                span.label Minute (1-60):
+                input(type="text", name="minute")
+            div.actions
+                input(type="submit", id="schedule-close-submit" value="Schedule close")

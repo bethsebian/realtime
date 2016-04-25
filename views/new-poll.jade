@@ -5,23 +5,7 @@ html(lang="en")
   body
     h1= title
     h2= "Add a new poll"
-    form(name="add-poll", action='/polls', method="post")
-        div.input
-            span.label Name:
-            input(type="text", name="name")
-        div.input
-            span.label Option 1:
-            input(type="text", name="a")
-        div.input
-            span.label Option 2:
-            input(type="text", name="b")
-        div.input
-            span.label Option 3:
-            input(type="text", name="c")
-        div.input
-            span.label Option 4:
-            input(type="text", name="d")
-        div.actions
-            input(type="submit", value="add poll")
-    script(src="/socket.io/socket.io.js")
-    script(src="/client.js")
+
+    include ./includes/new-poll-form.jade
+
+    include ./includes/footer.jade

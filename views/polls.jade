@@ -14,5 +14,6 @@ html(lang="en")
         li= val.option4
         li
           a(href="localhost:3000/polls/" + index, target='_blank') View poll details
-    script(src="/socket.io/socket.io.js")
-    script(src="/client.js")
+
+    include ./includes/footer.jade
+

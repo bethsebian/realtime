@@ -16,7 +16,7 @@ html(lang="en")
       li= poll.option4
         button(id="d" class="options-button" name=poll.name) select
 
-    #vote-tally
+    div(id="vote-tally-" + pollId)
       each val, index in poll.votes
         span= index + ": " + val
         br

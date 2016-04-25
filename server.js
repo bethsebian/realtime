@@ -77,7 +77,7 @@ io.on('connection', function (socket) {
       var voteOption = message.vote;
       var poll = message.pollId;
       incrementVotes(poll, voteOption);
-      io.sockets.emit('voteTally', {votes: app.locals.polls[poll].votes, vote: voteOption})
+      io.sockets.emit('voteTally', {votes: app.locals.polls[poll].votes, vote: voteOption, pollId: poll})
       // io.sockets.emit('voteCount', countVotes(votes));
     }
   });

@@ -8,9 +8,8 @@ for (var i = 0; i < buttons.length; i++ ) {
   });
 }
 
-var voteTallyDiv = document.getElementById('vote-tally')
-
 socket.on('voteTally', function (message) {
+  var voteTallyDiv = document.getElementById('vote-tally-' + message.pollId )
   var votes = message.votes;
   var newTally = "";
   Object.keys(votes).forEach(function (key) {

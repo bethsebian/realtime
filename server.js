@@ -39,11 +39,19 @@ app.get('/polls/new', (request, response) => {
   response.render('new-poll');
 });
 
+app.post('/polls/:id', (request, response) => {
+
+});
+
 app.get('/polls/:id', (request, response) => {
   var pollId = request.params.id;
   var poll = app.locals.polls[pollId];
 
-  response.render('poll', { pollId: pollId, poll: poll });
+  if(Object.keys(request.query).length > 0) {
+    scheduleCloseTime(request.query, poll);
+  } else {
+    response.render('poll', { pollId: pollId, poll: poll });
+  }
 });
 
 app.get('/voting/:id', (request, response) => {
@@ -51,6 +59,8 @@ app.get('/voting/:id', (request, response) => {
   var poll = app.locals.polls[pollId];
   response.render('voting', { pollId: pollId, poll: poll, voting: true });
 });
+
+
 
 // app.listen(app.get('port'), () => {
 //   console.log(`${app.locals.title} is running on ${app.get('port')}.`);
@@ -81,7 +91,6 @@ io.on('connection', function (socket) {
       io.sockets.emit('voteTally', {votes: app.locals.polls[poll].votes, vote: voteOption, pollId: poll, poll: app.locals.polls[poll]});
     }
     if (channel === "closePoll") {
-      console.log("closePoll hit")
       app.locals.polls[poll].active = false;
       io.sockets.emit('updateStatus', {pollId: poll, poll: app.locals.polls[poll]});
     }
@@ -99,7 +108,7 @@ var incrementVotes = function (poll, voteOption) {
   app.locals.polls[poll].votes[voteOption]++;
 };
 
-var getVoteTally = function(pollInfo) {
+var getVoteTally = function (pollInfo) {
   var tally = {};
   Object.keys(pollInfo).forEach(function (key) {
     if(key !== "name" && pollInfo[key].length !== 0 ) {
@@ -107,6 +116,12 @@ var getVoteTally = function(pollInfo) {
     }
   });
   return tally;
+};
+
+var scheduleCloseTime = function (data, pollObj) {
+  var closeStamp = new Date(data.year, (data.month - 1), data.day, data.hour, data.minute, 0, 0);
+  pollObj.scheduledClose = closeStamp;
+  console.log(pollObj);
 };
 
 module.exports = app;

@@ -9,6 +9,15 @@ for (var i = 0; i < voteButtons.length; i++ ) {
   });
 }
 
+var scheduleClose = document.getElementById('schedule-close-submit')
+
+scheduleClose.addEventListener('click', function () {
+  var closeWrap = document.getElementById('close-wrap');
+  var scheduleForm = document.getElementById('schedule-form');
+  if (scheduleForm) { closeWrap.remove(scheduleForm); }
+
+})
+
 for (var i = 0; i < closePollButtons.length; i++ ) {
   closePollButtons[i].addEventListener('click', function () {
     var id = window.location.pathname.split('/')[2]

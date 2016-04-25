@@ -30,7 +30,7 @@ app.get('/polls', (request, response) => {
 app.post('/polls', (request, response) => {
   var id = generateId();
   app.locals.polls[id] = request.body;
-  app.locals.polls[id].votes = { a: 0, b: 0, c: 0, d: 0 };
+  app.locals.polls[id].votes = getVoteTally(request.body)
   response.redirect(`polls/${id}`);
 });
 
@@ -94,18 +94,14 @@ var incrementVotes = function (poll, voteOption) {
   app.locals.polls[poll].votes[voteOption]++;
 };
 
-//
-// function countVotes(votes) {
-//   var voteCount = {
-//       A: 0,
-//       B: 0,
-//       C: 0,
-//       D: 0
-//   };
-//   for (var vote in votes) {
-//     voteCount[votes[vote]]++;
-//   }
-//   return voteCount;
-// }
-//
+var getVoteTally = function(pollInfo) {
+  var tally = {};
+  Object.keys(pollInfo).forEach(function (key) {
+    if(key !== "name" && pollInfo[key].length !== 0 ) {
+      tally[key] = 0;
+    }
+  });
+  return tally;
+};
+
 module.exports = app;

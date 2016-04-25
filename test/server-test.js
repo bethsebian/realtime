@@ -28,6 +28,7 @@ describe('Server', () => {
   describe('GET /polls/:id', () => {
     it('should not return a 404', (done) => {
       app.locals.polls = { "uniqueid": fixtures.validPoll };
+      app.locals.polls["uniqueid"].votes = { a: 0, b:0, c:0, d:0 };
 
       this.request.get('/polls/uniqueid', (error, response) => {
         if (error) { done(error); }
@@ -38,6 +39,7 @@ describe('Server', () => {
 
     it('should show unique poll content', (done) => {
       app.locals.polls = { "uniqueid": fixtures.validPoll };
+      app.locals.polls["uniqueid"].votes = { a: 0, b:0, c:0, d:0 };
 
       this.request.get('/polls/uniqueid', (error, response) => {
         if (error) { done(error); }

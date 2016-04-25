@@ -48,7 +48,6 @@ app.get('/polls/:id', (request, response) => {
 app.get('/voting/:id', (request, response) => {
   var pollId = request.params.id;
   var poll = app.locals.polls[pollId];
-  console.log(app.locals.polls[pollId]);
   response.render('voting', { pollId: pollId, poll: poll });
 });
 
@@ -93,7 +92,6 @@ io.on('connection', function (socket) {
 
 var incrementVotes = function (poll, voteOption) {
   app.locals.polls[poll].votes[voteOption]++;
-  console.log(app.locals.polls[poll].votes);
 };
 
 //

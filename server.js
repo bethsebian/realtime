@@ -31,6 +31,7 @@ app.post('/polls', (request, response) => {
   var id = generateId();
   app.locals.polls[id] = request.body;
   app.locals.polls[id].votes = getVoteTally(request.body)
+  app.locals.polls[id].active = true;
   response.redirect(`polls/${id}`);
 });
 
@@ -48,7 +49,7 @@ app.get('/polls/:id', (request, response) => {
 app.get('/voting/:id', (request, response) => {
   var pollId = request.params.id;
   var poll = app.locals.polls[pollId];
-  response.render('voting', { pollId: pollId, poll: poll });
+  response.render('voting', { pollId: pollId, poll: poll, voting: true });
 });
 
 // app.listen(app.get('port'), () => {
@@ -73,12 +74,16 @@ io.on('connection', function (socket) {
 //   socket.emit('statusMessage', 'You have connected.')
 //
   socket.on('message', function (channel, message) {
+    var voteOption = message.vote;
+    var poll = message.pollId;
     if (channel === 'voteSubmitted') {
-      var voteOption = message.vote;
-      var poll = message.pollId;
       incrementVotes(poll, voteOption);
-      io.sockets.emit('voteTally', {votes: app.locals.polls[poll].votes, vote: voteOption, pollId: poll, poll: app.locals.polls[poll]})
-      // io.sockets.emit('voteCount', countVotes(votes));
+      io.sockets.emit('voteTally', {votes: app.locals.polls[poll].votes, vote: voteOption, pollId: poll, poll: app.locals.polls[poll]});
+    }
+    if (channel === "closePoll") {
+      console.log("closePoll hit")
+      app.locals.polls[poll].active = false;
+      io.sockets.emit('updateStatus', {pollId: poll, poll: app.locals.polls[poll]});
     }
   });
 //

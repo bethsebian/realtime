@@ -1,10 +1,18 @@
 var socket = io();
-var buttons = document.getElementsByClassName('options-button');
+var voteButtons = document.getElementsByClassName('options-button');
+var closePollButtons = document.getElementsByClassName('close-poll');
 
-for (var i = 0; i < buttons.length; i++ ) {
-  buttons[i].addEventListener('click', function () {
+for (var i = 0; i < voteButtons.length; i++ ) {
+  voteButtons[i].addEventListener('click', function () {
     var id = window.location.pathname.split('/')[2]
     socket.send('voteSubmitted', { vote: this.id, pollId: id });
+  });
+}
+
+for (var i = 0; i < closePollButtons.length; i++ ) {
+  closePollButtons[i].addEventListener('click', function () {
+    var id = window.location.pathname.split('/')[2]
+    socket.send('closePoll', { pollId: id });
   });
 }
 
@@ -13,10 +21,21 @@ socket.on('voteTally', function (message) {
   var votes = message.votes;
   var newTally = "";
   Object.keys(votes).forEach(function (key) {
-    newTally = newTally + (message.poll[key] + ": " + votes[key] + '\n');
+    newTally = newTally + message.poll[key] + ": " + votes[key] + '\n';
   });
   voteTallyDiv.innerText = newTally;
 });
+
+socket.on('updateStatus', function(message) {
+  var pollStatusDiv = document.getElementById('poll-status');
+  pollStatusDiv.innerHTML = "Poll has closed" + "<br>";
+
+  var votingButtons = document.getElementById('voting-buttons');
+  var removeButtons = document.getElementById('close-buttons');
+  if (removeButtons) { votingButtons.remove(removeButtons); }
+});
+
+
 
 
 // button.addEventListener('click', function () {

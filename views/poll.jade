@@ -5,6 +5,14 @@ html(lang="en")
   body
     h1= title
     h3= poll.name
+    h4
+      #poll-status
+        if !poll.active
+          span Poll has closed
+        else
+          h4= "Poll is open"
+          button(id=index class="close-poll") Close poll
+          br
 
     div(id="vote-tally-" + pollId)
       each val, index in poll.votes

@@ -5,11 +5,12 @@ html(lang="en")
   body
     h1= title
     h3= poll.name
-    ul
-      li= poll.option1 + ": " + poll.votes.a
-      li= poll.option2 + ": " + poll.votes.b
-      li= poll.option3 + ": " + poll.votes.c
-      li= poll.option4 + ": " + poll.votes.d
+
+    div(id="vote-tally-" + pollId)
+      each val, index in poll.votes
+        span= poll[index] + ": " + val
+        br
+
     h3
       a(href="localhost:3000/polls/" + pollId) Admin link
     h3

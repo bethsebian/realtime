@@ -13,7 +13,7 @@ socket.on('voteTally', function (message) {
   var votes = message.votes;
   var newTally = "";
   Object.keys(votes).forEach(function (key) {
-    newTally = newTally + (key + ": " + votes[key] + '\n');
+    newTally = newTally + (message.poll[key] + ": " + votes[key] + '\n');
   });
   voteTallyDiv.innerText = newTally;
 });

@@ -6,19 +6,16 @@ html(lang="en")
     h1= title
     h3= poll.name
 
-    ul
-      li= poll.option1
-        button(id="a" class="options-button" name=poll.name) select
-      li= poll.option2
-        button(id="b" class="options-button" name=poll.name) select
-      li= poll.option3
-        button(id="c" class="options-button" name=poll.name) select
-      li= poll.option4
-        button(id="d" class="options-button" name=poll.name) select
+    div(id="voting-buttons")
+      each val, index in poll.votes
+        span= poll[index]
+        button(id=index class="options-button" name=poll.name) select
+        br
+
 
     div(id="vote-tally-" + pollId)
       each val, index in poll.votes
-        span= index + ": " + val
+        span= poll[index] + ": " + val
         br
 
     script(src="/socket.io/socket.io.js")

@@ -13,24 +13,10 @@ var voteTallyDiv = document.getElementById('vote-tally')
 socket.on('voteTally', function (message) {
   var votes = message.votes;
   var newTally = "";
-  console.log(newTally);
-
   Object.keys(votes).forEach(function (key) {
-    newTally = newTally + (key + ": " + votes[key] + "\n")
-    console.log(newTally);
+    newTally = newTally + (key + ": " + votes[key] + '\n');
   });
-  console.log(newTally);
-
   voteTallyDiv.innerText = newTally;
-
-  // for (var i = 0; i < Object.keys(votes).length; i++ ) {
-  //   // console.log("hello world!")
-  //   voteTallyDiv.innerText = votes
-  //
-  // // voteTallyDiv.innerText = message.votes
-  // // each val, index in poll.votes
-  // //   li= index + ": " + val
-  // }
 });
 
 

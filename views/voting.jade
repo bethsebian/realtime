@@ -18,7 +18,8 @@ html(lang="en")
 
     #vote-tally
       each val, index in poll.votes
-        li= index + ": " + val
+        span= index + ": " + val
+        br
 
     script(src="/socket.io/socket.io.js")
     script(src="/client.js")

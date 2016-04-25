@@ -80,7 +80,7 @@ io.on('connection', function (socket) {
 //
   socket.on('message', function (channel, message) {
     if (channel === 'voteSubmitted') {
-      console.log(socket.vote)
+      console.log(message.vote)
       // votes[socket.id] = message;
       // io.sockets.emit('voteCount', countVotes(votes));
     }

@@ -9,6 +9,7 @@ app.set('port', process.env.PORT || 3000);
 app.set('view engine', 'jade');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static('public'));
 
 app.locals.title = 'Realtime';
 app.locals.polls = {};
@@ -61,13 +62,13 @@ app.get('/voting/:id', (request, response) => {
 //
 //
 //
-// const socketIo = require('socket.io');
-// const io = socketIo(server);
+const socketIo = require('socket.io');
+const io = socketIo(server);
 //
 // var votes = {};
 //
-// io.on('connection', function (socket) {
-//   console.log('A user has connected.', io.engine.clientsCount);
+io.on('connection', function (socket) {
+  console.log('A user has connected.', io.engine.clientsCount);
 //   io.sockets.emit('usersConnected', io.engine.clientsCount);
 //   socket.emit('statusMessage', 'You have connected.')
 //
@@ -84,7 +85,7 @@ app.get('/voting/:id', (request, response) => {
 //     socket.emit('voteCount', countVotes(votes));
 //     io.sockets.emit('usersConnected', io.engine.clientsCount);
 //   });
-// });
+});
 //
 // function countVotes(votes) {
 //   var voteCount = {

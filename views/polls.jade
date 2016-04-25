@@ -8,10 +8,10 @@ html(lang="en")
     ul
       each val, index in polls
         h3= val.name
-        li= val.option1
-        li= val.option2
-        li= val.option3
-        li= val.option4
+        li= val.a
+        li= val.b
+        li= val.c
+        li= val.d
         li
           a(href="localhost:3000/polls/" + index, target='_blank') View poll details
 

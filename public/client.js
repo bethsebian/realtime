@@ -27,8 +27,9 @@ for (var i = 0; i < closePollButtons.length; i++ ) {
 }
 
 socket.on('voteTally', function (message) {
+  console.log(message.pollId)
   var voteTallyDiv = document.getElementById('vote-tally-' + message.pollId )
-  var votes = message.votes;
+  var votes = message.poll.votes;
   var newTally = "";
   Object.keys(votes).forEach(function (key) {
     newTally = newTally + message.poll[key] + ": " + votes[key] + '\n';

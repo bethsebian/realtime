@@ -46,43 +46,31 @@ app.post('/polls/:id', (request, response) => {
 app.get('/polls/:id', (request, response) => {
   var pollId = request.params.id;
   var poll = app.locals.polls[pollId];
+  updateStatus(poll);
 
-  if(Object.keys(request.query).length > 0) {
+  if (Object.keys(request.query).length > 0) {
     scheduleCloseTime(request.query, poll);
-  } else {
-    response.render('poll', { pollId: pollId, poll: poll });
   }
+
+  response.render('poll', { pollId: pollId, poll: poll });
 });
+
 
 app.get('/voting/:id', (request, response) => {
   var pollId = request.params.id;
   var poll = app.locals.polls[pollId];
+  updateStatus(poll);
+
   response.render('voting', { pollId: pollId, poll: poll, voting: true });
 });
 
 
-
-// app.listen(app.get('port'), () => {
-//   console.log(`${app.locals.title} is running on ${app.get('port')}.`);
-// });
-
-
-//
-//
-//
-//
-//
-//
 const socketIo = require('socket.io');
 const io = socketIo(server);
-//
-// var votes = {};
-//
+
 io.on('connection', function (socket) {
   console.log('A user has connected.', io.engine.clientsCount);
-//   io.sockets.emit('usersConnected', io.engine.clientsCount);
-//   socket.emit('statusMessage', 'You have connected.')
-//
+
   socket.on('message', function (channel, message) {
     var voteOption = message.vote;
     var poll = message.pollId;
@@ -95,17 +83,23 @@ io.on('connection', function (socket) {
       io.sockets.emit('updateStatus', {pollId: poll, poll: app.locals.polls[poll]});
     }
   });
-//
-//   socket.on('disconnect', function () {
-//     console.log('A user has disconnected.', io.engine.clientsCount);
-//     delete votes[socket.id];
-//     socket.emit('voteCount', countVotes(votes));
-//     io.sockets.emit('usersConnected', io.engine.clientsCount);
-//   });
 });
 
+var updateStatus = function (poll) {
+  if (poll.scheduledClose && poll.scheduledClose < currentTime) {
+    poll.active = false;
+  }
+};
+
 var incrementVotes = function (poll, voteOption) {
-  app.locals.polls[poll].votes[voteOption]++;
+  if (!poll.scheduledClose || poll.scheduledClose && poll.scheduledClose > currentTime()) {
+    app.locals.polls[poll].votes[voteOption]++;
+  }
+};
+
+var currentTime = function () {
+  var d = new Date();
+  return d.toUTCString();
 };
 
 var getVoteTally = function (pollInfo) {
@@ -121,7 +115,6 @@ var getVoteTally = function (pollInfo) {
 var scheduleCloseTime = function (data, pollObj) {
   var closeStamp = new Date(data.year, (data.month - 1), data.day, data.hour, data.minute, 0, 0);
   pollObj.scheduledClose = closeStamp;
-  console.log(pollObj);
 };
 
 module.exports = app;

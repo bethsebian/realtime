@@ -136,12 +136,12 @@ describe('Server', () => {
         if (error) { done(error); }
         assert(response.body.includes(fixtures.validPoll.name),
               `"/polls/new does not include ${fixtures.validPoll.name}.`);
-        assert(response.body.includes(fixtures.validPoll.option1),
-              `"/polls/new does not include ${fixtures.validPoll.option1}.`);
-        assert(response.body.includes(fixtures.validPoll.option2),
-              `"/polls/new does not include ${fixtures.validPoll.option2}.`);
-        assert(response.body.includes(fixtures.validPoll.option3),
-              `"/polls/new does not include ${fixtures.validPoll.option3}.`);
+        assert(response.body.includes(fixtures.validPoll.a),
+              `"/polls/new does not include ${fixtures.validPoll.a}.`);
+        assert(response.body.includes(fixtures.validPoll.b),
+              `"/polls/new does not include ${fixtures.validPoll.b}.`);
+        assert(response.body.includes(fixtures.validPoll.c),
+              `"/polls/new does not include ${fixtures.validPoll.c}.`);
         done();
       });
     });
